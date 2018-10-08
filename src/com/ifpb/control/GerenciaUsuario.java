@@ -10,7 +10,7 @@ import com.ifpb.dao.DaoListGenerico;
 import com.ifpb.model.Usuario;
 
 public class GerenciaUsuario extends DaoListGenerico<Usuario>{
-	public static File file = new File("Usuarios");
+	public static File file = new File("binarios/Usuarios");
 	
 	public static boolean validarUsuario(String email, String senha) throws FileNotFoundException, ClassNotFoundException, IOException {
 		Usuario u = buscarUsuario(email);
