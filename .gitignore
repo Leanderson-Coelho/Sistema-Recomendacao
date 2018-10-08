@@ -1,4 +1,7 @@
 # Created by https://www.gitignore.io/api/java
+#projeto
+.classpath
+.project
 
 ### Java ###
 # Compiled class file
