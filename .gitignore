@@ -5,7 +5,7 @@
 *.class
 
 #Binários
-Usuarios
+Usuarios.bin
 
 # Log file
 *.log
