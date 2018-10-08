@@ -60,7 +60,7 @@ public class GerenciaRecomendacao {
 		return expericencias;
 	}
 	
-	private static List<Filme> constroiFilmes(List<Experiencia> itens){
+	private static List<Filme> constroiFilmes(List<Experiencia> itens) throws FileNotFoundException, ClassNotFoundException, IOException{
 		List<Filme> filmes = new ArrayList<>();
 		if(itens!=null) {
 			for(Experiencia i: itens) {

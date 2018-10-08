@@ -3,6 +3,7 @@ package com.ifpb.view;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +18,6 @@ import com.ifpb.model.Usuario;
 
 public class view {
 	private static Usuario u;
-
 	public static void main(String[] args) {
 		Scanner ler = new Scanner(System.in);
 		int opcao = 1;
@@ -94,17 +94,55 @@ public class view {
 				opcao=ler.nextInt();
 				if(opcao==1) {
 					ler.nextLine();
-					if(GerenciaFilme.adicionarFilme(construirFilme())) {
-						System.out.println("\n\nFilme adicionado!\n\n");
+					try {
+						if(GerenciaFilme.adicionarFilme(construirFilme())) {
+							System.out.println("\n\nFilme adicionado!\n\n");
+						}else
+							System.out.println("Não foi possível adicionar o filme\n");
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}else if(opcao==2) {
-					ler.nextLine();
-					System.out.print("Digite o nome do filme: ");
-					String nome = ler.nextLine();
-					System.out.println("\n"+GerenciaFilme.buscarFilmePorNome(nome)+"\n");
+					try {
+						ler.nextLine();
+						System.out.print("Digite o nome do filme: ");
+						String nome = ler.nextLine();
+						System.out.println("\n"+GerenciaFilme.buscarFilmePorNome(nome)+"\n");
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else if(opcao == 3) {
-					System.out.println("Filmes");
-					GerenciaFilme.listar().stream().forEach((f)->{System.out.println(f.getNome()+" - "+f.getProdutora());});
+					try {
+						System.out.println("Filmes");
+//						GerenciaFilme.listar().stream().forEach((f)->{System.out.println(f.getNome()+" - "+f.getProdutora());});
+						for(Filme f: GerenciaFilme.listar()) {
+							System.out.println(f.getNome()+" - "+f.getProdutora());
+						}
+						
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					System.out.println("");
 				}else if(opcao==0) {
 					opcao= -1;
