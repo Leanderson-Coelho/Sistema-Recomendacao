@@ -8,7 +8,6 @@
 *.class
 
 #Binários
-binarios/
 
 # Log file
 *.log
