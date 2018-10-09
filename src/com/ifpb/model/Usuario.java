@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.ifpb.exception.NotaInvalidaException;
+
 public class Usuario implements Serializable {
 	private String email;
 	private String senha;
@@ -22,28 +24,42 @@ public class Usuario implements Serializable {
 		experiencias = new ArrayList<>();
 	}
 	
-	public boolean novaExperiencia(int nota, int idFilme) {
+	public boolean novaExperiencia(int nota, int idFilme) throws NotaInvalidaException {
+		if(nota>10||nota<0) {
+			throw new NotaInvalidaException();
+		}
 		if(idFilme>0) {
-			adicionarExperiencia(new Experiencia(nota, idFilme));
-			ordenarExperiencias();
-			return true;
+			if(adicionarExperiencia(new Experiencia(nota, idFilme))) {
+				ordenarExperiencias();
+				return true;
+			}
 		}
 		return false;
 	}
 	
 	private boolean adicionarExperiencia(Experiencia novaEx) {
-		if(buscarExp(novaEx.getCodigo())==null)
+		if(buscarExp(novaEx.getIdFilme())==null)
 			return experiencias.add(novaEx);
 		return false;
 	}
 	
-	private Experiencia buscarExp(int codigo) {
+	private Experiencia buscarExp(int idFilme) {
 		for(Experiencia e: experiencias) {
-			if(e.getCodigo() == codigo)
+			if(e.getIdFilme()==idFilme)
 				return e;
 		}
 		return null;
 			
+	}
+	
+	public boolean removerExperiencia(int idFilme) {
+		for(Experiencia e: experiencias) {
+			if(e.getIdFilme()==idFilme) {
+				experiencias.remove(e);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void ordenarExperiencias() {

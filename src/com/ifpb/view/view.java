@@ -12,6 +12,7 @@ import java.util.Scanner;
 import com.ifpb.control.GerenciaFilme;
 import com.ifpb.control.GerenciaRecomendacao;
 import com.ifpb.control.GerenciaUsuario;
+import com.ifpb.exception.NotaInvalidaException;
 import com.ifpb.model.Experiencia;
 import com.ifpb.model.Filme;
 import com.ifpb.model.Usuario;
@@ -203,49 +204,52 @@ public class view {
 					System.out.println(e.getMessage());
 				}
 			}else if(opcao==3) {
-				System.out.println("1: Minhas avaliações \t2: Avaliar Filme \t0: Sair");
-				opcao = ler.nextInt();
-				if(opcao==1) {
-					List<Experiencia> exp;
-					try {
-						exp = GerenciaUsuario.buscarUsuario(usuarioAtual.getEmail()).getExperiencias();
-//						System.out.println(exp);
-						if(!exp.isEmpty()) {
-							for(Experiencia e: exp) {
-								System.out.println("Nota: "+e.getNota()+" Filme: "+GerenciaFilme.buscarFilmePorCodigo(e.getIdFilme()).getNome());
-							}
-							System.out.println("");
-						}
-					} catch (FileNotFoundException e) {
-						System.out.println(e.getMessage());
-					} catch (ClassNotFoundException e) {
-						System.out.println(e.getMessage());
-					} catch (IOException e) {
-						System.out.println(e.getMessage());
-					}
-				}else if(opcao==2) {
-					try {
-						System.out.println("Nova avaliação");
-						int nota =0, idFilme=0;
-						System.out.print("Informe a nota atribuida: ");
-						nota = ler.nextInt();
-						System.out.print("Informe o nome do filme: ");
-						ler.nextLine();
-						Filme filme = GerenciaFilme.buscarFilmePorNome(ler.nextLine());
-						if(filme!=null) {
-							if(GerenciaUsuario.novaAvaliação(usuarioAtual.getEmail(), filme.getCodigo(), nota)) {
-								System.out.println("Avaliação realizada!\n");
+				while(opcao!=-1) {
+					System.out.println("1: Minhas avaliações \t2: Avaliar Filme \t0: Sair");
+					System.out.println("3: Apagar avaliação");
+					opcao = ler.nextInt();
+					if(opcao==1) {
+						listarExperiencia(usuarioAtual);
+					}else if(opcao==2) {
+						try {
+							System.out.println("Nova avaliação");
+							GerenciaFilme.listarOrganizado();
+							int nota =0, idFilme=0;
+							System.out.print("Informe a nota atribuida: ");
+							nota = ler.nextInt();
+							System.out.print("Informe o código do filme: ");
+							ler.nextLine();
+							Filme filme = GerenciaFilme.buscarFilmePorCodigo(ler.nextInt());
+							if(filme!=null) {
+								if(GerenciaUsuario.novaExperiencia(usuarioAtual.getEmail(), filme.getCodigo(), nota)) {
+									System.out.println("Avaliação realizada!\n");
+								}else {
+									System.out.println("Não foi possível avaliar!\n");
+								}
 							}else {
-								System.out.println("Não foi possível avaliar!\n");
+								System.out.println("Não foi encontrado o filme\n");
 							}
-						}else {
-							System.out.println("Não foi encontrado o filme\n");
+						} catch (ClassNotFoundException | IOException | NotaInvalidaException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-					} catch (ClassNotFoundException | IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					}else if(opcao==3) {
+						try {
+							listarExperiencia(usuarioAtual);
+							System.out.print("Digite o código do filme: ");
+							if(GerenciaUsuario.removerExperiencia(usuarioAtual.getEmail(), ler.nextInt())) {
+								System.out.println("Avaliação removida!\n");
+							}else {
+								System.out.println("Não foi possível remover a avaliação!\n");
+							}
+						} catch (ClassNotFoundException | IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}else if(opcao==0) {
+						opcao=-1;
 					}
-				}
+				}				
 			}else if(opcao==4) {
 				ler.nextLine();
 				System.out.println("Remover usuário");
@@ -297,5 +301,23 @@ public class view {
 		System.out.print("Digite o ano: ");
 		ano=ler.nextInt();
 		return LocalDate.of(ano, mes, dia);
+	}
+	
+	public static void listarExperiencia(Usuario usuarioAtual) {
+		List<Experiencia> exp;
+		try {
+			exp = GerenciaUsuario.buscarUsuario(usuarioAtual.getEmail()).getExperiencias();
+//			System.out.println(exp);
+			if(!exp.isEmpty()) {
+				for(Experiencia e: exp) {
+					System.out.println("Nota: "+e.getNota()+" Filme: "+GerenciaFilme.buscarFilmePorCodigo(e.getIdFilme()).getNome()+" Código do filme: "+e.getIdFilme());
+				}
+				System.out.println("");
+			}else {
+				System.out.println("Não foram feitas avaliações\n");
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }

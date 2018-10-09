@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.ifpb.dao.DaoListGenerico;
+import com.ifpb.exception.NotaInvalidaException;
 import com.ifpb.model.Experiencia;
 import com.ifpb.model.Usuario;
 
@@ -32,7 +33,6 @@ public class GerenciaUsuario extends DaoListGenerico<Usuario>{
 	public static boolean adicionarUsuario(Usuario novoUsuario) throws FileNotFoundException, ClassNotFoundException, IOException {
 		List<Usuario> usuarios = getStruct(file);
 //		contador++;
-		System.out.println(buscarUsuario(novoUsuario.getEmail()));
 		if(buscarUsuario(novoUsuario.getEmail())==null) {
 			usuarios.add(novoUsuario);
 			setStruct(usuarios, file);
@@ -90,10 +90,20 @@ public class GerenciaUsuario extends DaoListGenerico<Usuario>{
 		return false;
 	}
 	
-	public static boolean novaAvaliação(String email,int idFilme,int nota) throws FileNotFoundException, ClassNotFoundException, IOException {
+	public static boolean novaExperiencia(String email,int idFilme,int nota) throws FileNotFoundException, ClassNotFoundException, IOException, NotaInvalidaException {
 		Usuario u = buscarUsuario(email);
 		if(u.novaExperiencia(nota, idFilme)) {
 			if(editar(email, u)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean removerExperiencia(String email, int idFilme) throws FileNotFoundException, ClassNotFoundException, IOException {
+		Usuario u = buscarUsuario(email);
+		if(u.removerExperiencia(idFilme)) {
+			if(editar(u.getEmail(), u)) {
 				return true;
 			}
 		}
