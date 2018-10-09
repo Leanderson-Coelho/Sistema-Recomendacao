@@ -144,7 +144,11 @@ public class view {
 							System.out.print("Digite o nome do filme: ");
 							String nome = ler.nextLine();
 							Filme filme = GerenciaFilme.buscarFilmePorNome(nome);
-							System.out.println("\tCódigo: "+filme.getCodigo()+"\n"+"\tNome: "+filme.getNome()+"\n"+"\tDireção: "+filme.getDirecao()+"\n"+"\tData lançamento: "+filme.getData()+"\n"+"\tIdioma: "+filme.getIdioma()+"\n");
+							if(filme!=null) {
+								System.out.println("\tCódigo: "+filme.getCodigo()+"\n"+"\tNome: "+filme.getNome()+"\n"+"\tDireção: "+filme.getDirecao()+"\n"+"\tData lançamento: "+filme.getData()+"\n"+"\tIdioma: "+filme.getIdioma()+"\n");
+							}else {
+								System.out.println("Filme não encontrado\n");
+							}
 						} catch (FileNotFoundException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
