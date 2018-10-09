@@ -5,14 +5,14 @@ import java.time.LocalDate;
 
 public class Filme implements Serializable{
 	private String nome;
-	private String produtora;
+	private String direcao;
 	private LocalDate data;
 	private String idioma;
 	private int codigo;
 	
 	public Filme(String nome, String produtora, LocalDate data, String idioma, int codigo) {
 		this.nome = nome;
-		this.produtora = produtora;
+		this.direcao = produtora;
 		this.data = data;
 		this.idioma = idioma;
 		this.codigo = codigo;
@@ -30,12 +30,12 @@ public class Filme implements Serializable{
 		this.nome = nome;
 	}
 
-	public String getProdutora() {
-		return produtora;
+	public String getDirecao() {
+		return direcao;
 	}
 
-	public void setProdutora(String produtora) {
-		this.produtora = produtora;
+	public void setDirecao(String direcao) {
+		this.direcao = direcao;
 	}
 
 	public LocalDate getData() {
@@ -64,7 +64,7 @@ public class Filme implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Filme [nome=" + nome + ", produtora=" + produtora + ", data=" + data + ", idioma=" + idioma
+		return "Filme [nome=" + nome + ", produtora=" + direcao + ", data=" + data + ", idioma=" + idioma
 				+ ", codigo=" + codigo + "]";
 	}
 
