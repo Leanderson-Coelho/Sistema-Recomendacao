@@ -15,14 +15,16 @@ import com.ifpb.control.GerenciaUsuario;
 import com.ifpb.exception.NotaInvalidaException;
 import com.ifpb.model.Experiencia;
 import com.ifpb.model.Filme;
+import com.ifpb.model.Genero;
 import com.ifpb.model.Usuario;
 
 public class view {
-	private static Usuario u;
+//	private static Usuario u;
 	private static final String LOGIN_MASTER = "0";
 	private static final String SENHA_MASTER = "0";
 	
 	public static void main(String[] args) {
+		
 		Scanner ler = new Scanner(System.in);
 		int opcao = 1;
 		Usuario usuarioAtual = new Usuario();
@@ -141,11 +143,11 @@ public class view {
 					}else if(opcao==2) {
 						try {
 							ler.nextLine();
-							System.out.print("Digite o nome do filme: ");
-							String nome = ler.nextLine();
-							Filme filme = GerenciaFilme.buscarFilmePorNome(nome);
+							System.out.print("Digite o código do filme: ");
+							Filme filme = GerenciaFilme.buscarFilmePorCodigo(ler.nextInt());
 							if(filme!=null) {
-								System.out.println("\tCódigo: "+filme.getCodigo()+"\n"+"\tNome: "+filme.getNome()+"\n"+"\tDireção: "+filme.getDirecao()+"\n"+"\tData lançamento: "+filme.getData()+"\n"+"\tIdioma: "+filme.getIdioma()+"\n");
+								System.out.println("\tCódigo: "+filme.getCodigo()+"\n"+"\tNome: "+filme.getNome()+"\n"+"\tDireção: "+filme.getDirecao()
+								+"\n"+"\tData lançamento: "+filme.getData()+"\n"+"\tIdioma: "+filme.getIdioma()+"\n"+"\tGeneros: "+filme.getGeneros()+"\n");
 							}else {
 								System.out.println("Filme não encontrado\n");
 							}
