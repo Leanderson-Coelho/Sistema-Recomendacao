@@ -39,7 +39,6 @@ public class view {
 					usuarioAtual.setEmail(ler.nextLine());
 					System.out.print("Senha: ");
 					usuarioAtual.setSenha(ler.nextLine());
-				
 					if(GerenciaUsuario.validarUsuario(usuarioAtual.getEmail(), usuarioAtual.getSenha())) {
 						menu(ler,opcao,usuarioAtual);
 					}else
@@ -200,8 +199,36 @@ public class view {
 						for(Filme f: filmes) {
 							System.out.println(f.getNome()+"\n");
 						}
-					}else
-						System.out.println("\n\nNão foram encontrados filmes para recomendar\n");
+					}else {
+						System.out.println("Não foram encontrados filmes para recomendar a partir de suas avaliações\n");
+						List<Genero> generosRelevantes = new ArrayList<>();
+						System.out.println("1 - AÇÃO \t2 - GUERRA \t3 - ROMANCE \t4 - COMEDIA\n5 - SUSPENSE \t6 - TERROR \t7 - DRAMA \t8 - FICÇÂO CIENTÍFICA\n"
+								+ "9 - FANTASIA \t10 - ANIMAÇÃO \t11 - Aventura");
+						System.out.print("Informe o código do genero de filme relevante para você: ");
+						construirGeneros(generosRelevantes, ler.nextInt());
+						int cont = 0;
+						while(cont<2) {
+							System.out.println("1 - AÇÃO \t2 - GUERRA \t3 - ROMANCE \t4 - COMEDIA\n5 - SUSPENSE \t6 - TERROR \t7 - DRAMA \t8 - FICÇÂO CIENTÍFICA\n"
+									+ "9 - FANTASIA \t10 - ANIMAÇÃO \t11 - Aventura");
+							System.out.print("Informe outro genero relevante para você ou 0 para sair: ");
+							int resposta = ler.nextInt();
+							if(resposta>0) {
+								cont++;
+								construirGeneros(generosRelevantes, resposta);
+							}else {
+								cont = 3;
+							}
+						}
+						System.out.println("\n");
+						List<Filme> filmesIndicar = GerenciaRecomendacao.recomendacaoUsuarioInexperiente(generosRelevantes);
+						if(!filmesIndicar.isEmpty()) {
+							for(Filme f: filmesIndicar) {
+								System.out.println(f.getNome()+" "+f.getGeneros()+"\n");
+							}
+						}else {
+							System.out.println("Não foram encontrados filmes\n");
+						}
+					}
 				} catch (FileNotFoundException e) {
 					System.out.println(e.getMessage());
 				} catch (ClassNotFoundException e) {
@@ -309,6 +336,49 @@ public class view {
 		return LocalDate.of(ano, mes, dia);
 	}
 	
+//	1 - AÇÃO \t2 - GUERRA \t3 - ROMANCE \t4 - COMEDIA\n5 - SUSPENSE \t6 - TERROR \t7 - DRAMA \t8 - FICÇÂO CIENTÍFICA\n"
+//	+ "9 - FANTASIA \t10 - ANIMAÇÃO \t11 - Aventura
+	
+	public static void construirGeneros(List<Genero> generos,int codigo) {
+		switch(codigo) {
+			case 1:
+				generos.add(Genero.ACAO);
+				break;
+			case 2:
+				generos.add(Genero.GUERRA);
+				break;
+			case 3:
+				generos.add(Genero.ROMANCE);
+				break;
+			case 4:
+				generos.add(Genero.COMEDIA);
+				break;
+			case 5:
+				generos.add(Genero.SUSPENSE);
+				break;
+			case 6:
+				generos.add(Genero.TERROR);
+				break;
+			case 7:
+				generos.add(Genero.DRAMA);
+				break;
+			case 8:
+				generos.add(Genero.FICCAO_CIENTIFICA);
+				break;
+			case 9:
+				generos.add(Genero.FANTASIA);
+				break;
+			case 10:
+				generos.add(Genero.ANIMACAO);
+				break;
+			case 11:
+				generos.add(Genero.AVENTURA);
+				break;
+			default:
+				System.out.println("opção inválida!\n");
+		}
+	}
+	
 	public static void listarExperiencia(Usuario usuarioAtual) {
 		List<Experiencia> exp;
 		try {
@@ -316,7 +386,10 @@ public class view {
 //			System.out.println(exp);
 			if(!exp.isEmpty()) {
 				for(Experiencia e: exp) {
-					System.out.println("Nota: "+e.getNota()+" Filme: "+GerenciaFilme.buscarFilmePorCodigo(e.getIdFilme()).getNome()+" Código do filme: "+e.getIdFilme());
+					Filme filme = GerenciaFilme.buscarFilmePorCodigo(e.getIdFilme());
+					if(filme!=null) {
+						System.out.println("Nota: "+e.getNota()+" Filme: "+filme.getNome()+" Código do filme: "+e.getIdFilme());
+					}
 				}
 				System.out.println("");
 			}else {
